@@ -14,9 +14,14 @@ const INIT_SQL_PATH = path.join(__dirname, 'init.sql');
 // Ensure database directory exists if custom path is provided
 if (process.env.DATABASE_PATH) {
   const dbDir = path.dirname(DB_PATH);
-  if (!fs.existsSync(dbDir)) {
-    fs.mkdirSync(dbDir, { recursive: true });
-    console.log(`Created database directory: ${dbDir}`);
+  try {
+    if (!fs.existsSync(dbDir)) {
+      fs.mkdirSync(dbDir, { recursive: true });
+      console.log(`Created database directory: ${dbDir}`);
+    }
+  } catch (error) {
+    console.error(`Failed to create database directory ${dbDir}:`, error.message);
+    throw error;
   }
 }
 
